@@ -1,0 +1,22 @@
+{
+  "name": "tours-booker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kelvin0712/tours-booker.git"
+  },
+  "author": "Kelvin Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kelvin0712/tours-booker/issues"
+  },
+  "homepage": "https://github.com/kelvin0712/tours-booker#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
