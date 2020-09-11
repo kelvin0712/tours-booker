@@ -18,6 +18,8 @@ const handleValidationError = (err) => {
   return new AppError(message, 400);
 };
 
+const handleJWTError = () => new AppError('Invalid token', 401);
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -55,6 +57,8 @@ module.exports = (err, req, res, next) => {
     if (err.name === 'CastError') error = handleCastError(err);
     if (err.code === 11000) error = handleDuplicateError(err);
     if (err.name === 'ValidationError') error = handleValidationError(err);
+    if (err.name === 'JsonWebTokenError') error = handleJWTError();
+
     sendProductionDev(error, res);
   }
 };
