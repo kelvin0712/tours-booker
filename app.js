@@ -1,5 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 const app = express();
 
@@ -9,11 +13,33 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
 // 1. Middlewares
+
+// Set security header
+app.use(helmet());
+
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-app.use(express.json());
+// Limit request from the same API
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour!',
+});
+
+app.use('/api', limiter);
+
+// Body parser, reading data from body to req.body
+app.use(express.json({ limit: '10kb' }));
+
+// Data senitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data senitization against XSS
+app.use(xss());
+
+// Serving static files
 app.use(express.static(`${__dirname}/public`));
 
 // 3. Router
